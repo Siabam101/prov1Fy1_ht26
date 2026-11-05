@@ -112,69 +112,77 @@
             </div>
         </div>
 
-        <!-- Result Section (Hidden by Default) -->
-        <div id="result-card" class="hidden max-w-3xl mx-auto w-full space-y-6">
-            
-            <div class="bg-slate-900/90 backdrop-blur-2xl p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-6">
-                <!-- Header Status -->
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-800">
-                    <div class="flex items-center gap-3">
-                        <div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-emerald-400">
-                            <i data-lucide="file-check-2" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-indigo-400">Provresultat Funnet</span>
-                            <h3 className="text-xl font-black text-white" id="display-code-title">Provkod: XXXXXX</h3>
-                        </div>
-                    </div>
-
+        <!-- Welcome Step (Shown after valid code input) -->
+        <div id="welcome-card" class="hidden max-w-lg mx-auto w-full">
+            <div class="bg-slate-900/90 backdrop-blur-2xl p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-6 text-center">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                    <span class="text-xs font-semibold text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20" id="welcome-code-badge">
+                        Kod: XXXXXX
+                    </span>
                     <button 
                         onclick="resetView()" 
-                        class="text-xs font-semibold text-slate-400 hover:text-white px-3 py-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-all flex items-center gap-1.5"
+                        class="text-xs font-semibold text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-all flex items-center gap-1.5"
+                        title="Mata in en annan kod"
                     >
-                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Sök annan kod
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Byt kod</span>
                     </button>
                 </div>
 
-                <!-- Action Download Bar -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <a 
-                        id="download-pdf-btn" 
-                        href="#" 
-                        target="_blank"
-                        download
-                        class="bg-indigo-600 hover:bg-indigo-500 text-white p-4 rounded-2xl font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-600/25"
-                    >
-                        <i data-lucide="download" class="w-4 h-4"></i>
-                        <span>Ladda ner PDF</span>
-                    </a>
-
-                    <a 
-                        id="open-tab-btn" 
-                        href="#" 
-                        target="_blank"
-                        class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 p-4 rounded-2xl font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-2 transition-all"
-                    >
-                        <i data-lucide="external-link" class="w-4 h-4 text-indigo-400"></i>
-                        <span>Öppna i ny flik</span>
-                    </a>
+                <div class="space-y-3 py-2">
+                    <div class="inline-flex p-3 bg-emerald-500/10 text-emerald-400 rounded-2xl mb-1 border border-emerald-500/20">
+                        <i data-lucide="sparkles" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white tracking-tight">Välkommen!</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed font-medium">
+                        Klicka på länken nedan för att få se AI-feedbacken som du samtyckt till att få:
+                    </p>
                 </div>
 
-                <!-- PDF Viewer Preview Frame -->
-                <div class="space-y-2 pt-2">
-                    <div class="flex justify-between items-center px-1">
-                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Förhandsgranskning</span>
-                        <span class="text-[11px] text-slate-500">PDF-dokument</span>
+                <div class="pt-2">
+                    <button 
+                        onclick="openFullscreenFeedback()" 
+                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold uppercase tracking-wider py-4 px-6 rounded-2xl shadow-xl shadow-indigo-600/30 transition-all flex justify-center items-center gap-3 text-xs"
+                    >
+                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                        <span>Visa AI-Feedback för Provresultat</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fullscreen Viewer Modal (Shown when clicking link) -->
+        <div id="fullscreen-viewer" class="hidden fixed inset-0 z-[100] bg-slate-950 flex flex-col">
+            <!-- Top Toolbar -->
+            <div class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex justify-between items-center shadow-lg">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-indigo-600/20 text-indigo-400 rounded-xl border border-indigo-500/30">
+                        <i data-lucide="file-check-2" class="w-5 h-5"></i>
                     </div>
-                    <div class="w-full bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-inner h-[600px] relative">
-                        <iframe 
-                            id="pdf-frame" 
-                            src="" 
-                            class="w-full h-full border-none"
-                            title="Provresultat PDF"
-                        ></iframe>
+                    <div>
+                        <h3 class="font-black text-white text-sm tracking-tight" id="viewer-title">AI-Feedback</h3>
+                        <p class="text-[10px] text-slate-400">Skyddad förhandsgranskning</p>
                     </div>
                 </div>
+
+                <button 
+                    onclick="resetView()" 
+                    class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition-all"
+                >
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    <span>Mata in kod igen</span>
+                </button>
+            </div>
+
+            <!-- PDF Viewer Frame in Fullscreen -->
+            <div class="flex-1 w-full bg-slate-950 relative overflow-hidden select-none" oncontextmenu="return false;">
+                <iframe 
+                    id="pdf-frame" 
+                    src="" 
+                    class="w-full h-full border-none"
+                    title="Provresultat PDF"
+                ></iframe>
             </div>
         </div>
 
@@ -190,8 +198,10 @@
         // Init Lucide icons
         lucide.createIcons();
 
+        // Global variable for current loaded file
+        let currentPdfPath = '';
+
         // Lista med existerande pseudonymer/filer i repositoriet
-        // Ersätt eller bygg ut denna array med koder som laddats upp i provFy1ht26
         const validCodes = [
             "006700",
             "101005",
@@ -222,14 +232,12 @@
             // Konstruera filnamn baserat på mönstret
             const fileName = `Provresultat_${input}.pdf`;
 
-            // Kontrollera om koden finns i vår lista (eller försök ladda filen direkt)
             if (validCodes.includes(input)) {
-                showResult(input, fileName);
+                showWelcomeScreen(input, fileName);
             } else {
-                // Alternativt: försök ladda ändå om läraren lagt till filer utan att uppdatera koden i JS
                 checkFileExists(fileName, (exists) => {
                     if (exists) {
-                        showResult(input, fileName);
+                        showWelcomeScreen(input, fileName);
                     } else {
                         errorText.textContent = `Hittade inget provresultat för pseudonym: ${input}`;
                         errorDiv.classList.remove('hidden');
@@ -244,28 +252,34 @@
                 .catch(() => callback(false));
         }
 
-        function showResult(code, fileName) {
+        function showWelcomeScreen(code, fileName) {
             document.getElementById('login-card').classList.add('hidden');
-            const resultCard = document.getElementById('result-card');
+            document.getElementById('welcome-code-badge').textContent = `Kod: ${code}`;
+            document.getElementById('viewer-title').textContent = `AI-Feedback (${code})`;
             
-            document.getElementById('display-code-title').textContent = `Pseudonym: ${code}`;
-            
-            // Sätt sökvägar för PDF
-            const pdfPath = `./${fileName}`;
-            document.getElementById('download-pdf-btn').href = pdfPath;
-            document.getElementById('open-tab-btn').href = pdfPath;
-            document.getElementById('pdf-frame').src = pdfPath;
+            // Inkludera PDF-parametrar för att dölja verktygsfält, spara-knappar och navigeringspaneler
+            currentPdfPath = `./${fileName}#toolbar=0&navpanes=0&scrollbar=0`;
 
-            resultCard.classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('welcome-card').classList.remove('hidden');
+        }
+
+        function openFullscreenFeedback() {
+            document.getElementById('welcome-card').classList.add('hidden');
+            const pdfFrame = document.getElementById('pdf-frame');
+            pdfFrame.src = currentPdfPath;
+            
+            document.getElementById('fullscreen-viewer').classList.remove('hidden');
         }
 
         function resetView() {
-            document.getElementById('result-card').classList.add('hidden');
+            document.getElementById('fullscreen-viewer').classList.add('hidden');
+            document.getElementById('welcome-card').classList.add('hidden');
             document.getElementById('login-card').classList.remove('hidden');
+            
             document.getElementById('code-input').value = '';
             document.getElementById('pdf-frame').src = '';
             document.getElementById('error-message').classList.add('hidden');
+            currentPdfPath = '';
         }
     </script>
 </body>
